@@ -7,15 +7,25 @@ const baseConsulta = {}
 const funcoes = {
   LembreteCriado: (lembrete) => {
     //lembrete = {contador: 1, texto: "Fazer café"}
-    baseConsulta[lembrete.contador] = lembrete    
+    baseConsulta[lembrete.contador] = lembrete
   },
   ObservacaoCriada: (observacao) => {
     //observacao = {id: '123456', texto: "abc", lembreteId: 1}
     const observacoes = baseConsulta[observacao.lembreteId]['observacoes'] || []
     observacoes.push(observacao)
     baseConsulta[observacao.lembreteId]['observacoes'] = observacoes
-  }
-}
+  },
+  ObservacaoAtualizada: (observacao) => {
+    const observacoes =
+
+      baseConsulta[observacao.lembreteId]["observacoes"];
+    const indice = observacoes.findIndex((o) => o.id ===
+
+      observacao.id);
+
+    observacoes[indice] = observacao;
+  },
+};
 
 /* const funcoes = {
   tipoEvento: () => {},
@@ -41,10 +51,13 @@ app.post('/eventos', (req, res) => {
 
   // }
   // else
-  funcoes[req.body.tipo](req.body.dados)
-  res.send(baseConsulta)
-})
+  //funcoes[req.body.tipo](req.body.dados)
+  //res.send(baseConsulta)
+  //foi incrementado o try/cath
+    try {
+     funcoes[req.body.tipo](req.body.dados);
+     } catch (err) {}
+     res.status(200).send({ msg: "ok" });
+    });
 
 app.listen(6000, () => console.log("Consultas. Porta 6000."))
-
-
